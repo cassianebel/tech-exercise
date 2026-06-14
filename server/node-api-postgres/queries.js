@@ -19,42 +19,65 @@ const getUsers = async (request, response) => {
 
 const getUserById = async (request, response) => {
   const id = parseInt(request.params.id, 10);
+  if (Number.isNaN(id)) {
+    return response.status(400).json({ error: "Invalid user id" });
+  }
 
   try {
     const results = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
-    response.status(200).json(results.rows);
+    if (results.rows.length === 0) {
+      return response.status(404).json({ error: "User not found" });
+    }
+    return response.status(200).json(results.rows[0]);
   } catch (error) {
-    throw error;
+    console.error("Error fetching user by id:", error);
+    return response.status(500).json({ error: "Internal server error" });
   }
 };
 
 const createUser = async (request, response) => {
   const { name, email } = request.body;
+  if (!name || !email) {
+    return response.status(400).json({ error: "Name and email are required" });
+  }
 
   try {
     const results = await pool.query(
       "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *",
       [name, email],
     );
-    response.status(201).send(`User added with ID: ${results.rows[0].id}`);
+    return response.status(201).json(results.rows[0]);
   } catch (error) {
-    throw error;
+    console.error("Error creating user:", error);
+    return response.status(500).json({ error: "Internal server error" });
   }
 };
 
 const updateUser = async (request, response) => {
   const id = parseInt(request.params.id, 10);
+  if (Number.isNaN(id)) {
+    return response.status(400).json({ error: "Invalid user id" });
+  }
+
   const { name, email } = request.body;
+  if (!name || !email) {
+    return response.status(400).json({ error: "Name and email are required" });
+  }
 
   try {
-    await pool.query("UPDATE users SET name = $1, email = $2 WHERE id = $3", [
-      name,
-      email,
-      id,
-    ]);
-    response.status(200).send(`User modified with ID: ${id}`);
+    const result = await pool.query(
+      "UPDATE users SET name = $1, email = $2 WHERE id = $3",
+      [name, email, id],
+    );
+    if (result.rowCount === 0) {
+      return response.status(404).json({ error: "User not found" });
+    }
+    return response
+      .status(200)
+      .json({ message: `User modified with ID: ${id}` });
   } catch (error) {
-    throw error;
+    console.error("Error updating user:", error);
+    return response.status(500).json({ error: "Internal server error" });
   }
 };
 
