@@ -4,6 +4,14 @@ import "./App.css";
 function App() {
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState(null);
+  const [updateForm, setUpdateForm] = useState({ name: "", email: "" });
+
+  // Update the form when user changes
+  useEffect(() => {
+    if (user) {
+      setUpdateForm({ name: user.name, email: user.email });
+    }
+  }, [user]);
 
   // GET list of users
   useEffect(() => {
@@ -88,11 +96,21 @@ function App() {
                   });
               }}
             >
-              <input type="text" name="name" defaultValue={user?.name || ""} />
+              <input
+                type="text"
+                name="name"
+                value={updateForm.name}
+                onChange={(e) =>
+                  setUpdateForm({ ...updateForm, name: e.target.value })
+                }
+              />
               <input
                 type="email"
                 name="email"
-                defaultValue={user?.email || ""}
+                value={updateForm.email}
+                onChange={(e) =>
+                  setUpdateForm({ ...updateForm, email: e.target.value })
+                }
               />
               <button type="submit">Update User</button>
             </form>
