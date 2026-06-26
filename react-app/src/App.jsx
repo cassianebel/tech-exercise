@@ -36,6 +36,7 @@ function App() {
   return (
     <>
       <h1>Cassia's Tech Exercise</h1>
+      <p>Michael was here</p>
 
       <h2>Display All Users</h2>
       <ul>
