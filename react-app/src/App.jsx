@@ -36,6 +36,7 @@ function App() {
   return (
     <>
       <h1>Cassia's Tech Exercise</h1>
+      <p>Michael was here</p>
       <p> Tristan was here! </p>
       <p>Danie was here</p>
       <p>Cassia was here!</p>
