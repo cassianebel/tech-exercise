@@ -37,6 +37,9 @@ function App() {
     <>
       <h1>Cassia's Tech Exercise</h1>
       <p> Tristan was here! </p>
+      <p>Danie was here</p>
+      <p>Cassia was here!</p>
+
       <h2>Display All Users</h2>
       <ul>
         {users.map((user) => (
