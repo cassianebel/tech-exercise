@@ -58,6 +58,7 @@ function App() {
       <p> Tristan was here! </p>
       <p>Danie was here</p>
       <p>Cassia was here!</p>
+      <p>Hello world!</p>
     </>
   );
 }
